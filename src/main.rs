@@ -39,7 +39,7 @@ fn main() -> Result<()> {
 			Ok(DirScore {
 				path: PathBuf::from(row.get::<usize, String>(0)?),
 				score: row.get(1)?,
-				created_at: row.get::<usize, usize>(2)?,
+				created_at: row.get(2)?,
 			})
 		})?;
 		for dump_row in dump {
