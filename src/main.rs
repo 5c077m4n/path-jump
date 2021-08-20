@@ -39,7 +39,7 @@ fn main() -> Result<()> {
 			Ok(DirScore {
 				path: PathBuf::from(row.get::<usize, String>(0)?),
 				score: row.get(1)?,
-				created_at: row.get::<usize, usize>(2)?.into(),
+				created_at: row.get::<usize, usize>(2)?,
 			})
 		})?;
 		for dump_row in dump {
@@ -62,7 +62,7 @@ fn main() -> Result<()> {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     path TEXT NOT NULL UNIQUE,
                     score INTEGER NOT NULL DEFAULT 0,
-                    created_at INTEGER DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW', 'localtime')) NOT NULL
+                    created_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL
                 )",
 			[],
 		)?;
