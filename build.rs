@@ -17,16 +17,16 @@ fn main() -> io::Result<()> {
 	file.write_all(
 		r#"#!/bin/sh
 
-_PJ_BIN_PATH="$(dirname "$0")/pj"
+__PJ_BIN_PATH="$(pwd)/$(dirname "$0")/pj"
 
-"$_PJ_BIN_PATH"
+"$__PJ_BIN_PATH"
 
 cd () {
-    "$_PJ_BIN_PATH --add $1 &" &>/dev/null
+    "$__PJ_BIN_PATH --add $1 &" &>/dev/null
     builtin cd "$1"
 }
 ${PJ_CUSTOM_CMD:-pj} () {
-    builtin cd "$("$_PJ_BIN_PATH" "$1")"
+    builtin cd "$("$__PJ_BIN_PATH" "$1")"
 }
 "#
 		.as_bytes(),
