@@ -22,7 +22,7 @@ _PJ_BIN_PATH="$(dirname "$0")/pj"
 "$_PJ_BIN_PATH"
 
 cd () {
-    "$_PJ_BIN_PATH" --add "$1" &>/dev/null
+    "$_PJ_BIN_PATH --add $1 &" &>/dev/null
     builtin cd "$1"
 }
 ${PJ_CUSTOM_CMD:-pj} () {
