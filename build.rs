@@ -7,7 +7,7 @@ use std::{
 
 fn main() -> io::Result<()> {
 	let out_dir = env::var_os("OUT_DIR").unwrap();
-	let dest_path = Path::new(&out_dir).join("pj-init.sh");
+	let dest_path = Path::new(&out_dir).join("pj.sh");
 
 	let mut file = File::create(&dest_path)?;
 	file.write_all(
