@@ -1,9 +1,10 @@
-use rusqlite::{Connection, Result};
 use std::{
 	env::{current_dir, temp_dir},
 	path::PathBuf,
 };
 use structopt::{self, StructOpt};
+
+use rusqlite::{Connection, Result};
 
 mod lib;
 use lib::queries;
@@ -39,6 +40,13 @@ fn main() -> Result<()> {
 		let dir_path = dir_path.to_str().unwrap();
 
 		queries::upsert_path(&db_conn, dir_path)?;
+	} else if let Some(dir) = opt.dir {
+		let dir = current_dir().unwrap().join(dir);
+		let dir = dir.canonicalize().unwrap();
+		let dir = dir.to_str().unwrap();
+
+		let result = queries::find_dir(&db_conn, &dir)?;
+		println!("{}", &result);
 	} else {
 		queries::create_table(&db_conn)?;
 	}

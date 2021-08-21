@@ -1,14 +1,16 @@
-use std::{env, fs, path::Path};
+use std::{env, fs, io, path::Path};
 
-fn main() {
+fn main() -> io::Result<()> {
 	let out_dir = env::var_os("OUT_DIR").unwrap();
 	let dest_path = Path::new(&out_dir).join("pj.sh");
 	fs::write(
 		&dest_path,
 		r#"
-        echo "glue file"
+        ./pj
+        alias cd="./pj --add \"$1\" && cd \"$_\""
         "#,
-	)
-	.unwrap();
+	)?;
+
 	println!("cargo:rerun-if-changed=build.rs");
+    Ok(())
 }
