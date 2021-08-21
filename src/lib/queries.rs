@@ -9,8 +9,8 @@ pub fn clear_history(conn: &Connection) -> Result<usize> {
 }
 
 pub fn get_dump(conn: &Connection) -> Result<Vec<DirScore>> {
-	let mut stmt =
-		conn.prepare("select ds.path, ds.score, ds.created_at from dir_scoring as ds")?;
+	let mut stmt = conn
+		.prepare("SELECT ds.path, ds.score, ds.created_at, ds.updated_at FROM dir_scoring AS ds")?;
 	let mut rows = stmt.query([])?;
 
 	let mut dir_list: Vec<DirScore> = Vec::new();
@@ -19,6 +19,7 @@ pub fn get_dump(conn: &Connection) -> Result<Vec<DirScore>> {
 			path: PathBuf::from(row.get::<usize, String>(0)?),
 			score: row.get(1)?,
 			created_at: row.get(2)?,
+			updated_at: row.get(3)?,
 		});
 	}
 	Ok(dir_list)
@@ -38,8 +39,22 @@ pub fn create_table(conn: &Connection) -> Result<usize> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             path TEXT NOT NULL UNIQUE,
             score INTEGER NOT NULL DEFAULT 0,
-            created_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL
+            created_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL,
+            updated_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL
         )",
+		[],
+	)?;
+	conn.execute(
+		"CREATE TRIGGER IF NOT EXISTS dir_scoring__updated_at
+            AFTER UPDATE
+            ON dir_scoring
+            FOR EACH ROW
+            BEGIN
+                UPDATE dir_scoring
+                    SET updated_at = (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER))
+                    WHERE id = OLD.id;
+            END
+        ",
 		[],
 	)
 }
@@ -50,7 +65,7 @@ pub fn find_dir(conn: &Connection, dir_path: &str) -> Result<String> {
 		"SELECT ds.path
             FROM dir_scoring as ds
             WHERE lower(ds.path) LIKE '%' || :path || '%'
-            ORDER BY ds.score DESC, ds.created_at DESC, ds.path ASC
+            ORDER BY ds.score DESC, ds.updated_at DESC, ds.path ASC
         ",
 		&[(":path", dir_path)],
 		|row| row.get(0),
