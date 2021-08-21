@@ -9,7 +9,7 @@ fn main() -> io::Result<()> {
         #!/bin/sh
 
         ./pj
-        alias cd="./pj --add \"$1\" && cd \"$_\""
+        alias ${PJ_CMD:-pj}='./pj --add "$1" && cd "$_"'
         "#,
 	)?;
 
