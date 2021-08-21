@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Release Packaging
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        - ubuntu-latest
+        - macos-latest
+
+    name: Release Packaging
+    env:
+      PROJECT_BIN_NAME: pj
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Release Build
+        run: cargo build --release
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.PROJECT_BIN_NAME }}
+          path: ${{ matrix.os }}/target/release/${{ env.PROJECT_BIN_NAME }}
