@@ -1,10 +1,15 @@
-use std::{env, fs, io::{self, Write}, path::Path};
+use std::{
+	env,
+	fs::File,
+	io::{self, Write},
+	path::Path,
+};
 
 fn main() -> io::Result<()> {
 	let out_dir = env::var_os("OUT_DIR").unwrap();
 	let dest_path = Path::new(&out_dir).join("pj.sh");
 
-    let mut file = fs::File::create(&dest_path)?;
+	let mut file = File::create(&dest_path)?;
 	file.write_all(
 		b"
         #!/bin/sh
@@ -15,5 +20,5 @@ fn main() -> io::Result<()> {
 	)?;
 
 	println!("cargo:rerun-if-changed=build.rs");
-    Ok(())
+	Ok(())
 }
