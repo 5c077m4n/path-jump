@@ -17,6 +17,7 @@ jobs:
     env:
       PROJECT_BIN_NAME: pj
     runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -29,6 +30,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os }}-${{ env.PROJECT_BIN_NAME }}
-          path: target/release/${{ env.PROJECT_BIN_NAME }}/
+          name: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
+          path: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
           if-no-files-found: error
