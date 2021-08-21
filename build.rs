@@ -15,7 +15,8 @@ fn main() -> io::Result<()> {
         #!/bin/sh
 
         ./pj
-        alias ${PJ_CMD:-pj}='./pj --add \"$1\" && builtin cd \"$_\"'
+        alias cd='./pj --add \"$1\" && builtin cd \"$_\"'
+        alias ${PJ_CUSTOM_CMD:-pj}='builtin cd \"$(./pj $1)\"'
         ",
 	)?;
 
