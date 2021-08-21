@@ -1,5 +1,6 @@
 use std::{
 	env::{self, current_dir},
+	fs,
 	path::PathBuf,
 };
 use structopt::{self, StructOpt};
@@ -26,7 +27,7 @@ fn main() -> Result<()> {
 	let opt = Opt::from_args();
 	let home_dir = PathBuf::from(env::var_os("HOME").unwrap());
 	let db_path = home_dir.join(".config").join("pj");
-	std::fs::create_dir_all(&db_path).unwrap();
+	fs::create_dir_all(&db_path).unwrap();
 
 	let db_conn = Connection::open(db_path.join("pj.db"))?;
 
