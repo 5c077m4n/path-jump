@@ -49,7 +49,7 @@ pub fn find_dir(conn: &Connection, dir_path: &str) -> Result<String> {
 	conn.query_row(
 		"SELECT ds.path
             FROM dir_scoring as ds
-            WHERE lower(ds.path) LIKE :path
+            WHERE lower(ds.path) LIKE '%' || :path || '%'
             ORDER BY ds.score DESC, ds.created_at DESC, ds.path ASC
         ",
 		&[(":path", dir_path)],
