@@ -28,10 +28,10 @@ fn main() -> Result<()> {
 	if opt.clear_history {
 		queries::clear_history(&db_conn)?;
 	} else if opt.dump {
-		let dump = queries::get_dump(&db_conn);
+		let dump = queries::get_dump(&db_conn)?;
 		for dump_row in dump {
 			let dump_row = dump_row;
-			println!("{:?}", dump_row);
+			println!("{:#?}", dump_row);
 		}
 	} else if let Some(dir_path) = opt.add {
 		let dir_path = current_dir().unwrap().join(dir_path);
