@@ -1,5 +1,5 @@
 use std::{
-	env::{current_dir, temp_dir},
+	env::{self, current_dir},
 	path::PathBuf,
 };
 use structopt::{self, StructOpt};
@@ -12,8 +12,8 @@ use lib::queries;
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Path Jumper options", about = "All of the options for PJ.")]
 pub struct Opt {
-	#[structopt(parse(from_os_str))]
-	dir: Option<PathBuf>,
+	#[structopt()]
+	dir: Option<String>,
 	#[structopt(short, long)]
 	add: Option<PathBuf>,
 	#[structopt(short, long)]
@@ -24,7 +24,11 @@ pub struct Opt {
 
 fn main() -> Result<()> {
 	let opt = Opt::from_args();
-	let db_conn = Connection::open(temp_dir().join(".pj.db"))?;
+    let home_dir = PathBuf::from(env::var_os("HOME").unwrap());
+    let db_path = home_dir.join(".config").join("pj");
+    std::fs::create_dir_all(&db_path).unwrap();
+
+	let db_conn = Connection::open(db_path.join("pj.db"))?;
 
 	if opt.clear_history {
 		queries::clear_history(&db_conn)?;
@@ -41,10 +45,6 @@ fn main() -> Result<()> {
 
 		queries::upsert_path(&db_conn, dir_path)?;
 	} else if let Some(dir) = opt.dir {
-		let dir = current_dir().unwrap().join(dir);
-		let dir = dir.canonicalize().unwrap();
-		let dir = dir.to_str().unwrap();
-
 		let result = queries::find_dir(&db_conn, &dir)?;
 		println!("{}", &result);
 	} else {
