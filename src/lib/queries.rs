@@ -4,7 +4,6 @@ use rusqlite::{Connection, Result};
 
 use super::types::DirScore;
 
-
 pub fn create_table(conn: &Connection) -> Result<usize> {
 	conn.execute(
 		"CREATE TABLE IF NOT EXISTS dir_scoring (
