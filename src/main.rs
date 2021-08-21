@@ -1,14 +1,16 @@
+use rusqlite::{Connection, Result};
 use std::{
 	env::{current_dir, temp_dir},
 	path::PathBuf,
 };
+use structopt::{self, StructOpt};
 
-use rusqlite::{Connection, Result};
-use structopt::StructOpt;
+mod lib;
+use lib::queries;
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Path Jumper options", about = "All of the options for PJ.")]
-struct Opt {
+pub struct Opt {
 	#[structopt(parse(from_os_str))]
 	dir: Option<PathBuf>,
 	#[structopt(short, long)]
@@ -19,31 +21,16 @@ struct Opt {
 	clear_history: bool,
 }
 
-#[derive(Debug)]
-struct DirScore {
-	path: PathBuf,
-	score: usize,
-	created_at: usize,
-}
-
 fn main() -> Result<()> {
 	let opt = Opt::from_args();
 	let db_conn = Connection::open(temp_dir().join(".pj.db"))?;
 
 	if opt.clear_history {
-		db_conn.execute("DELETE FROM dir_scoring", [])?;
+		queries::clear_history(&db_conn)?;
 	} else if opt.dump {
-		let mut stmt =
-			db_conn.prepare("select ds.path, ds.score, ds.created_at from dir_scoring as ds")?;
-		let dump = stmt.query_map([], |row| {
-			Ok(DirScore {
-				path: PathBuf::from(row.get::<usize, String>(0)?),
-				score: row.get(1)?,
-				created_at: row.get(2)?,
-			})
-		})?;
+		let dump = queries::get_dump(&db_conn);
 		for dump_row in dump {
-			let dump_row = dump_row?;
+			let dump_row = dump_row;
 			println!("{:?}", dump_row);
 		}
 	} else if let Some(dir_path) = opt.add {
@@ -51,21 +38,9 @@ fn main() -> Result<()> {
 		let dir_path = dir_path.canonicalize().unwrap();
 		let dir_path = dir_path.to_str().unwrap();
 
-		db_conn.execute(
-			"INSERT INTO dir_scoring (path) VALUES (:path)
-                    ON CONFLICT(path) DO UPDATE SET score = score + 1 WHERE path = :path",
-			&[(":path", dir_path)],
-		)?;
+		queries::upsert_path(&db_conn, dir_path)?;
 	} else {
-		db_conn.execute(
-			"CREATE TABLE IF NOT EXISTS dir_scoring (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    path TEXT NOT NULL UNIQUE,
-                    score INTEGER NOT NULL DEFAULT 0,
-                    created_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL
-                )",
-			[],
-		)?;
+		queries::create_table(&db_conn)?;
 	}
 
 	Ok(())
