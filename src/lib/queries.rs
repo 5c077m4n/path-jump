@@ -48,9 +48,9 @@ pub fn find_dir(conn: &Connection, dir_path: &str) -> Result<String> {
 	let dir_path = &dir_path.to_lowercase();
 	conn.query_row(
 		"SELECT ds.path
-        FROM dir_scoring as ds
-        WHERE lower(ds.path) LIKE :path
-        ORDER BY ds.score DESC, ds.created_at DESC, ds.path ASC
+            FROM dir_scoring as ds
+            WHERE lower(ds.path) LIKE :path
+            ORDER BY ds.score DESC, ds.created_at DESC, ds.path ASC
         ",
 		&[(":path", dir_path)],
 		|row| row.get(0),

@@ -6,6 +6,8 @@ fn main() -> io::Result<()> {
 	fs::write(
 		&dest_path,
 		r#"
+        #!/bin/sh
+
         ./pj
         alias cd="./pj --add \"$1\" && cd \"$_\""
         "#,
