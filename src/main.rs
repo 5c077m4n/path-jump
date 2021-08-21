@@ -43,7 +43,7 @@ fn main() -> Result<()> {
 		let dir_path = dir_path.canonicalize().unwrap();
 		let dir_path = dir_path.to_str().unwrap();
 
-		queries::upsert_path(&db_conn, dir_path)?;
+		queries::upsert_dir(&db_conn, dir_path)?;
 	} else if let Some(dir) = opt.dir {
 		let result = queries::find_dir(&db_conn, &dir)?;
 		println!("{}", &result);

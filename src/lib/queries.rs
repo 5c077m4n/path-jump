@@ -4,34 +4,6 @@ use rusqlite::{Connection, Result};
 
 use super::types::DirScore;
 
-pub fn clear_history(conn: &Connection) -> Result<usize> {
-	conn.execute("DELETE FROM dir_scoring", [])
-}
-
-pub fn get_dump(conn: &Connection) -> Result<Vec<DirScore>> {
-	let mut stmt = conn
-		.prepare("SELECT ds.path, ds.score, ds.created_at, ds.updated_at FROM dir_scoring AS ds")?;
-	let mut rows = stmt.query([])?;
-
-	let mut dir_list: Vec<DirScore> = Vec::new();
-	while let Some(row) = rows.next()? {
-		dir_list.push(DirScore {
-			path: PathBuf::from(row.get::<usize, String>(0)?),
-			score: row.get(1)?,
-			created_at: row.get(2)?,
-			updated_at: row.get(3)?,
-		});
-	}
-	Ok(dir_list)
-}
-
-pub fn upsert_path(conn: &Connection, dir_path: &str) -> Result<usize> {
-	conn.execute(
-		"INSERT INTO dir_scoring (path) VALUES (:path)
-            ON CONFLICT(path) DO UPDATE SET score = score + 1 WHERE path = :path",
-		&[(":path", dir_path)],
-	)
-}
 
 pub fn create_table(conn: &Connection) -> Result<usize> {
 	conn.execute(
@@ -59,6 +31,14 @@ pub fn create_table(conn: &Connection) -> Result<usize> {
 	)
 }
 
+pub fn upsert_dir(conn: &Connection, dir_path: &str) -> Result<usize> {
+	conn.execute(
+		"INSERT INTO dir_scoring (path) VALUES (:path)
+            ON CONFLICT(path) DO UPDATE SET score = score + 1 WHERE path = :path",
+		&[(":path", dir_path)],
+	)
+}
+
 pub fn find_dir(conn: &Connection, dir_path: &str) -> Result<String> {
 	let dir_path = &dir_path.to_lowercase();
 	conn.query_row(
@@ -70,4 +50,25 @@ pub fn find_dir(conn: &Connection, dir_path: &str) -> Result<String> {
 		&[(":path", dir_path)],
 		|row| row.get(0),
 	)
+}
+
+pub fn clear_history(conn: &Connection) -> Result<usize> {
+	conn.execute("DELETE FROM dir_scoring", [])
+}
+
+pub fn get_dump(conn: &Connection) -> Result<Vec<DirScore>> {
+	let mut stmt = conn
+		.prepare("SELECT ds.path, ds.score, ds.created_at, ds.updated_at FROM dir_scoring AS ds")?;
+	let mut rows = stmt.query([])?;
+
+	let mut dir_list: Vec<DirScore> = Vec::new();
+	while let Some(row) = rows.next()? {
+		dir_list.push(DirScore {
+			path: PathBuf::from(row.get::<usize, String>(0)?),
+			score: row.get(1)?,
+			created_at: row.get(2)?,
+			updated_at: row.get(3)?,
+		});
+	}
+	Ok(dir_list)
 }
