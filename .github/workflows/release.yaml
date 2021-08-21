@@ -1,9 +1,9 @@
+name: Release Build
+
 on:
   push:
     branches:
       - main
-
-name: Release Packaging
 
 jobs:
   release:
@@ -29,5 +29,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.PROJECT_BIN_NAME }}
-          path: ${{ matrix.os }}/target/release/${{ env.PROJECT_BIN_NAME }}
+          name: ${{ matrix.os }}/${{ env.PROJECT_BIN_NAME }}
+          path: target/release/${{ env.PROJECT_BIN_NAME }}
