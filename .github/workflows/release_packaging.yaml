@@ -9,8 +9,9 @@ jobs:
   release:
     strategy:
       matrix:
-        - ubuntu-latest
-        - macos-latest
+        os:
+          - ubuntu-latest
+          - macos-latest
 
     name: Release Packaging
     env:
