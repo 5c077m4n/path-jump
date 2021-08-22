@@ -8,5 +8,5 @@ cd () {
     builtin cd "$1"
 }
 ${J_CUSTOM_CMD:-j} () {
-    builtin cd "$("$__J" "$1")"
+    cd "$("$__J $1")"
 }

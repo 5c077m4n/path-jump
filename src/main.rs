@@ -49,13 +49,16 @@ fn main() -> Result<()> {
 		}
 	} else if let Some(dir_path) = opt.add {
 		let dir_path = current_dir().unwrap().join(dir_path);
-		let dir_path = dir_path.canonicalize().unwrap();
-		let dir_path = dir_path.to_str().unwrap();
 
-		queries::upsert_dir(&db_conn, dir_path)?;
+		if let Ok(normalized_dir) = dir_path.canonicalize() {
+			let normalized_dir = normalized_dir.to_str().unwrap();
+			queries::upsert_dir(&db_conn, normalized_dir)?;
+		}
 	} else if let Some(dir) = opt.dir {
-		let result = queries::find_dir(&db_conn, &dir)?;
-		println!("{}", &result);
+		match queries::find_dir(&db_conn, &dir) {
+			Ok(result) => println!("{}", &result),
+			Err(_) => println!("{}", &dir),
+		};
 	} else {
 		queries::create_table(&mut db_conn)?;
 	}
