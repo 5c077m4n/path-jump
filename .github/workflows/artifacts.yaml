@@ -1,13 +1,14 @@
-name: Release Build
+name: Build Artifacts
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
 
 jobs:
-  release:
-    name: Release build
+  build_artifacts:
+    name: Build Artifacts
     strategy:
       matrix:
         os:
@@ -34,3 +35,4 @@ jobs:
             target/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
           if-no-files-found: error
+          retention-days: 7

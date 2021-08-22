@@ -1,0 +1,35 @@
+name: Tagged Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  tagged_release:
+    name: Tagged Release
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    env:
+      PROJECT_BIN_NAME: j
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Release Build
+        run: cargo build --release
+      - uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          files: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
