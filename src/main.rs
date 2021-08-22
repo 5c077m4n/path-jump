@@ -29,11 +29,11 @@ pub struct Opt {
 fn main() -> Result<()> {
 	let opt = Opt::from_args();
 
-	let data_dir = if let Some(xdg_data_dir) = env::var_os("XDG_DATA_HOME") {
-		PathBuf::from(xdg_data_dir)
+	let data_dir = if let Some(xdg_state_dir) = env::var_os("XDG_STATE_HOME") {
+		PathBuf::from(xdg_state_dir)
 	} else {
 		let home_dir = env::var_os("HOME").unwrap();
-		PathBuf::from(home_dir).join(".local").join("share")
+		PathBuf::from(home_dir).join(".local").join("state")
 	};
 	let data_dir = data_dir.join("j");
 	fs::create_dir_all(&data_dir).unwrap();
