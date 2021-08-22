@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
           name: ${{ steps.tag_version.outputs.VERSION }}-${{ matrix.os }}
-          tag_name: ${{ steps.tag_version.outputs.VERSION }}-${{ matrix.os }}
+          tag_name: ${{ steps.tag_version.outputs.VERSION }}
           files: |
             target/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
