@@ -28,6 +28,8 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - name: Test
+        run: cargo test
       - name: Release Build
         run: cargo build --release
       - name: Release
@@ -41,3 +43,5 @@ jobs:
           files: |
             target/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
+        env:
+          GITHUB_REPOSITORY: 5c077m4n/path-jump
