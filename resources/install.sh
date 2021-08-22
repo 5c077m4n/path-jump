@@ -4,7 +4,7 @@ __J="$(pwd)/$(dirname "$0")/j"
 "$__J"
 
 cd () {
-    "$__J" --add "$1" & &>/dev/null
+    "$__J --add $1 &" &>/dev/null
     builtin cd "$1"
 }
 ${J_CUSTOM_CMD:-j} () {
