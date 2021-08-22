@@ -11,7 +11,7 @@ mod lib;
 use lib::queries;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "Path Jumper options", about = "All of the options for PJ.")]
+#[structopt(name = "Path Jump options", about = "All of the options for Path Jump.")]
 pub struct Opt {
 	#[structopt()]
 	dir: Option<String>,
@@ -26,10 +26,10 @@ pub struct Opt {
 fn main() -> Result<()> {
 	let opt = Opt::from_args();
 	let home_dir = PathBuf::from(env::var_os("HOME").unwrap());
-	let db_path = home_dir.join(".config").join("pj");
+	let db_path = home_dir.join(".config").join("j");
 	fs::create_dir_all(&db_path).unwrap();
 
-	let mut db_conn = Connection::open(db_path.join("pj.db"))?;
+	let mut db_conn = Connection::open(db_path.join("j.db"))?;
 
 	if opt.clear_history {
 		queries::clear_history(&db_conn)?;
