@@ -29,7 +29,7 @@ fn main() -> Result<()> {
 	let db_path = home_dir.join(".config").join("pj");
 	fs::create_dir_all(&db_path).unwrap();
 
-	let db_conn = Connection::open(db_path.join("pj.db"))?;
+	let mut db_conn = Connection::open(db_path.join("pj.db"))?;
 
 	if opt.clear_history {
 		queries::clear_history(&db_conn)?;
@@ -49,7 +49,7 @@ fn main() -> Result<()> {
 		let result = queries::find_dir(&db_conn, &dir)?;
 		println!("{}", &result);
 	} else {
-		queries::create_table(&db_conn)?;
+		queries::create_table(&mut db_conn)?;
 	}
 
 	Ok(())

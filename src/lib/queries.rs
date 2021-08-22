@@ -4,18 +4,20 @@ use rusqlite::{Connection, Result};
 
 use super::types::DirScore;
 
-pub fn create_table(conn: &Connection) -> Result<usize> {
-	conn.execute(
+pub fn create_table(conn: &mut Connection) -> Result<()> {
+	let tx = conn.transaction()?;
+	tx.execute(
 		"CREATE TABLE IF NOT EXISTS dir_scoring (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            path TEXT NOT NULL UNIQUE,
-            score INTEGER NOT NULL DEFAULT 0,
+            path TEXT UNIQUE NOT NULL,
+            score INTEGER DEFAULT 0 NOT NULL,
             created_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL,
             updated_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL
-        )",
-		[],
-	)?;
-	conn.execute(
+        );
+        ",
+        []
+    )?;
+	tx.execute(
 		"CREATE TRIGGER IF NOT EXISTS dir_scoring__updated_at
             AFTER UPDATE
             ON dir_scoring
@@ -24,10 +26,11 @@ pub fn create_table(conn: &Connection) -> Result<usize> {
                 UPDATE dir_scoring
                     SET updated_at = (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER))
                     WHERE id = OLD.id;
-            END
+            END;
         ",
 		[],
-	)
+	)?;
+	tx.commit()
 }
 
 pub fn upsert_dir(conn: &Connection, dir_path: &str) -> Result<usize> {
