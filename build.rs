@@ -1,35 +1,18 @@
-use std::{
-	env,
-	fs::File,
-	io::{self, Write},
-	path::Path,
-};
+use std::{env, fs, io, path::Path};
 
 fn main() -> io::Result<()> {
 	let project_root = env::var_os("CARGO_MANIFEST_DIR").unwrap();
 	let target_profile = env::var_os("PROFILE").unwrap();
+
+	let origin_path = Path::new(&project_root)
+		.join("resources")
+		.join("install.sh");
 	let dest_path = Path::new(&project_root)
 		.join("target")
 		.join(&target_profile)
 		.join("j.sh");
 
-	let mut file = File::create(&dest_path)?;
-	file.write_all(
-		r#"#!/bin/sh
-
-__J="$(pwd)/$(dirname "$0")/j"
-$__J
-
-cd () {
-    "$__J --add $1 &" &>/dev/null
-    builtin cd "$1"
-}
-${J_CUSTOM_CMD:-j} () {
-    builtin cd "$($__J "$1")"
-}
-"#
-		.as_bytes(),
-	)?;
+	fs::copy(&origin_path, &dest_path)?;
 
 	println!("cargo:rerun-if-changed=build.rs");
 	Ok(())
