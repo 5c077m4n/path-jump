@@ -15,7 +15,7 @@ jobs:
 
     name: Release Packaging
     env:
-      PROJECT_BIN_NAME: pj
+      PROJECT_BIN_NAME: j
     runs-on: ${{ matrix.os }}
 
     steps:
