@@ -35,7 +35,7 @@ fn main() -> Result<()> {
 		let home_dir = env::var_os("HOME").unwrap();
 		PathBuf::from(home_dir).join(".local").join("share")
 	};
-	let data_dir = data_dir.join("J");
+	let data_dir = data_dir.join("j");
 	fs::create_dir_all(&data_dir).unwrap();
 
 	let mut db_conn = Connection::open(data_dir.join("j.db"))?;
