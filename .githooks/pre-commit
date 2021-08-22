@@ -2,3 +2,5 @@
 
 cargo fmt
 cargo clippy
+
+git add --update

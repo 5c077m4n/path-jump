@@ -11,7 +11,10 @@ mod lib;
 use lib::queries;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "Path Jump options", about = "All of the options for Path Jump.")]
+#[structopt(
+	name = "Path Jump options",
+	about = "All of the options for Path Jump."
+)]
 pub struct Opt {
 	#[structopt()]
 	dir: Option<String>,
