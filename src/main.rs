@@ -29,18 +29,16 @@ pub struct Opt {
 fn main() -> Result<()> {
 	let opt = Opt::from_args();
 
-	let db_path = if let Some(config_dir) = env::var_os("XDG_DATA_HOME") {
-		PathBuf::from(config_dir).join("j")
+	let data_dir = if let Some(xdg_data_dir) = env::var_os("XDG_DATA_HOME") {
+		PathBuf::from(xdg_data_dir)
 	} else {
 		let home_dir = env::var_os("HOME").unwrap();
-		PathBuf::from(home_dir)
-			.join(".local")
-			.join("share")
-			.join("j")
+		PathBuf::from(home_dir).join(".local").join("share")
 	};
-	fs::create_dir_all(&db_path).unwrap();
+	let data_dir = data_dir.join("J");
+	fs::create_dir_all(&data_dir).unwrap();
 
-	let mut db_conn = Connection::open(db_path.join("j.db"))?;
+	let mut db_conn = Connection::open(data_dir.join("j.db"))?;
 
 	if opt.clear_history {
 		queries::clear_history(&db_conn)?;
