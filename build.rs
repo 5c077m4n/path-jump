@@ -15,5 +15,6 @@ fn main() -> io::Result<()> {
 	fs::copy(&origin_path, &dest_path)?;
 
 	println!("cargo:rerun-if-changed=build.rs");
+	println!("cargo:rerun-if-changed=resources/install.sh");
 	Ok(())
 }
