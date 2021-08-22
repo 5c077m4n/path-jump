@@ -11,22 +11,21 @@ fn main() -> io::Result<()> {
 	let dest_path = Path::new(&project_root)
 		.join("target")
 		.join(&target_profile)
-		.join("pj.sh");
+		.join("j.sh");
 
 	let mut file = File::create(&dest_path)?;
 	file.write_all(
 		r#"#!/bin/sh
 
-__PJ_BIN_PATH="$(pwd)/$(dirname "$0")/pj"
-
-"$__PJ_BIN_PATH"
+__J="$(pwd)/$(dirname "$0")/j"
+$__J
 
 cd () {
-    "$__PJ_BIN_PATH --add $1 &" &>/dev/null
+    "$__J --add $1 &" &>/dev/null
     builtin cd "$1"
 }
-${PJ_CUSTOM_CMD:-pj} () {
-    builtin cd "$("$__PJ_BIN_PATH" "$1")"
+${J_CUSTOM_CMD:-j} () {
+    builtin cd "$($__J "$1")"
 }
 "#
 		.as_bytes(),
