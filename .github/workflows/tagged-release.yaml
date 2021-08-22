@@ -19,6 +19,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Tag version
+        id: tag_version
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -30,6 +34,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
+          title: ${{ steps.tag_version.outputs.VERSION }}-${{ matrix.os }}
           files: |
             target/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
