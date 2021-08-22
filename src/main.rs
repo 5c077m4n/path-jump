@@ -45,7 +45,6 @@ fn main() -> Result<()> {
 	} else if opt.dump {
 		let dump = queries::get_dump(&db_conn)?;
 		for dump_row in dump {
-			let dump_row = dump_row;
 			println!("{:#?}", dump_row);
 		}
 	} else if let Some(dir_path) = opt.add {
