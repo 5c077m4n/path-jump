@@ -15,4 +15,6 @@ Just press `j` to jump to whatever directory you want:
 - If you want to a relative path then append at the start `./`
 - If you want to use one from your history the just press `j` followed by whatever you remember from the path
 
+---
+
 Inspired by [z](https://github.com/rupa/z/).
