@@ -35,14 +35,10 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
-      - name: Add deps
-        run: |
-          apt install build-essential
-
       - name: Release build
         uses: actions-rs/cargo@v1
         with:
-          # use-cross: true
+          use-cross: true
           command: build
           args: --release --target ${{ matrix.target }}
 
