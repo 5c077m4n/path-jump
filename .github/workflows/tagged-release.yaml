@@ -35,6 +35,11 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
+      - name: Add musl dep
+        run: |
+          apk add build-base
+        if: ${{ endsWith(matrix.target, 'musl') }}
+
       - name: Release build
         uses: actions-rs/cargo@v1
         with:
