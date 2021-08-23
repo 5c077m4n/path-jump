@@ -1,6 +1,6 @@
 [package]
 name = "path-jump"
-version = "0.0.24-alpha.0"
+version = "0.0.24"
 edition = "2018"
 publish = false
 
