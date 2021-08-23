@@ -64,5 +64,5 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
           files: |
-            $GITHUB_WORKSPACE/artifacts/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
+            "**/artifacts/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}"
           fail_on_unmatched_files: true
