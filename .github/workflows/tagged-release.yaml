@@ -44,7 +44,7 @@ jobs:
           command: build
           args: --release --all-features
       - name: Create artifact
-        uses: TheDoctor0/zip-release@0.6
+        uses: TheDoctor0/zip-release@master
         with:
           type: zip
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
