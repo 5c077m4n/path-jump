@@ -28,6 +28,14 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Release Build
         run: cargo build --release
       - name: Upload Artifact
