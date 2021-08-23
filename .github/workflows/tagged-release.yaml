@@ -15,15 +15,11 @@ jobs:
           - macos-latest
     env:
       PROJECT_BIN_NAME: j
-      GITHUB_REPOSITORY: 5c077m4n/path-jump
+      TAG_VERSION: ${{ env.GITHUB_REF.replace(/\/refs\/tags\//, '') }}
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
-      - name: Tag version
-        id: tag_version
-        run: |
-          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -56,8 +52,6 @@ jobs:
           path: ${{ env.GITHUB_WORKSPACE }}/artifacts/
       - name: Release
         uses: softprops/action-gh-release@v1
-        env:
-          TAG_VERSION: ${{ steps.tag_version.outputs.VERSION }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
