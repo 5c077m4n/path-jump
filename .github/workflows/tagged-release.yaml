@@ -13,6 +13,7 @@ jobs:
       PROJECT_BIN_NAME: j
       ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
     strategy:
+      fail-fast: false
       matrix:
         target:
           - x86_64-unknown-linux-gnu
