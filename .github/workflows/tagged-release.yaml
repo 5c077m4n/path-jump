@@ -62,5 +62,5 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
           files: |
-            ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
+            target/release/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
           fail_on_unmatched_files: true
