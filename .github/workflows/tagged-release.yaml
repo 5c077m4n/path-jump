@@ -58,8 +58,7 @@ jobs:
           TAG_VERSION: ${{ steps.tag_version.outputs.VERSION }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
-          tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
+          tag_name: ${{ env.TAG_VERSION }}
           prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
           files: |
             target/release/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
