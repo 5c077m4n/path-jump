@@ -4,17 +4,16 @@ fn main() -> io::Result<()> {
 	let project_root = env::var_os("CARGO_MANIFEST_DIR").unwrap();
 	let target_profile = env::var_os("PROFILE").unwrap();
 
-	let origin_path = Path::new(&project_root)
-		.join("resources")
-		.join("install.sh");
+	let init_script = Path::new(&project_root).join("resources").join("j.sh");
 	let dest_path = Path::new(&project_root)
 		.join("target")
 		.join(&target_profile)
 		.join("j.sh");
 
-	fs::copy(&origin_path, &dest_path)?;
+	fs::copy(&init_script, &dest_path)?;
 
 	println!("cargo:rerun-if-changed=build.rs");
+	println!("cargo:rerun-if-changed=resources/j.sh");
 	println!("cargo:rerun-if-changed=resources/install.sh");
 	Ok(())
 }

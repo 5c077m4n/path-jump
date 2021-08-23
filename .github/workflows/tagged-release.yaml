@@ -42,11 +42,12 @@ jobs:
         run: cargo build --release
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TAG_VERSION: ${{ steps.tag_version.outputs.VERSION }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
-          tag_name: ${{ steps.tag_version.outputs.VERSION }}-${{ matrix.os }}
+          tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
           files: |
             target/release/${{ env.PROJECT_BIN_NAME }}
