@@ -8,15 +8,10 @@ on:
 jobs:
   tagged_release:
     name: Tagged Release
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
+    runs-on: ubuntu-latest
     env:
       PROJECT_BIN_NAME: j
       ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
-    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
@@ -38,21 +33,108 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-      - name: Release build
+
+      - name: Release build (x86_64-unknown-linux-gnu)
         uses: actions-rs/cargo@v1
         with:
           command: build
+          target: x86_64-unknown-linux-gnu
           args: --release --all-features
-      - name: Create artifact
+          override: true
+      - name: Create artifact (x86_64-unknown-linux-gnu)
         uses: TheDoctor0/zip-release@master
         with:
           type: zip
-          filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
-          directory: target/release/
+          filename: ${{ env.PROJECT_BIN_NAME }}_x86_64-unknown-linux-gnu.zip
           path: |
-            ${{ env.PROJECT_BIN_NAME }}
-            ${{ env.PROJECT_BIN_NAME }}.sh
-      - name: Release artifact
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+      - name: Cargo clean
+        uses: actions-rs/cargo@v1
+        with:
+          command: clean
+
+      - name: Release build (x86_64-apple-darwin)
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          target: x86_64-apple-darwin
+          args: --release --all-features
+          override: true
+      - name: Create artifact (x86_64-apple-darwin)
+        uses: TheDoctor0/zip-release@master
+        with:
+          type: zip
+          filename: ${{ env.PROJECT_BIN_NAME }}_x86_64-apple-darwin.zip
+          path: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+      - name: Cargo clean
+        uses: actions-rs/cargo@v1
+        with:
+          command: clean
+
+      - name: Release build (aarch64-apple-darwin)
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          target: aarch64-apple-darwin
+          args: --release --all-features
+          override: true
+      - name: Create artifact (aarch64-apple-darwin)
+        uses: TheDoctor0/zip-release@master
+        with:
+          type: zip
+          filename: ${{ env.PROJECT_BIN_NAME }}_aarch64-apple-darwin.zip
+          path: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+      - name: Cargo clean
+        uses: actions-rs/cargo@v1
+        with:
+          command: clean
+
+      - name: Release build (x86_64-unknown-linux-musl)
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          target: x86_64-unknown-linux-musl
+          args: --release --all-features
+          override: true
+      - name: Create artifact (x86_64-unknown-linux-musl)
+        uses: TheDoctor0/zip-release@master
+        with:
+          type: zip
+          filename: ${{ env.PROJECT_BIN_NAME }}_x86_64-unknown-linux-musl.zip
+          path: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+      - name: Cargo clean
+        uses: actions-rs/cargo@v1
+        with:
+          command: clean
+
+      - name: Release build (x86_64-unknown-freebsd)
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          target: x86_64-unknown-freebsd
+          args: --release --all-features
+          override: true
+      - name: Create artifact (x86_64-unknown-freebsd)
+        uses: TheDoctor0/zip-release@master
+        with:
+          type: zip
+          filename: ${{ env.PROJECT_BIN_NAME }}_x86_64-unknown-freebsd.zip
+          path: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+      - name: Cargo clean
+        uses: actions-rs/cargo@v1
+        with:
+          command: clean
+
+      - name: Release artifacts
         uses: softprops/action-gh-release@v1
         env:
           TAG_VERSION: ${{ steps.tag_version.outputs.VERSION }}
@@ -61,5 +143,9 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}
           prerelease: contains(env.TAG_VERSION, 'alpha') || contains(env.TAG_VERSION, 'beta')
           files: |
-            target/release/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
+            ${{ env.PROJECT_BIN_NAME }}_x86_64-unknown-linux-gnu.zip
+            ${{ env.PROJECT_BIN_NAME }}_x86_64-apple-darwin.zip
+            ${{ env.PROJECT_BIN_NAME }}_aarch64-apple-darwin.zip
+            ${{ env.PROJECT_BIN_NAME }}_x86_64-unknown-linux-musl.zip
+            ${{ env.PROJECT_BIN_NAME }}_x86_64-unknown-freebsd.zip
           fail_on_unmatched_files: true
