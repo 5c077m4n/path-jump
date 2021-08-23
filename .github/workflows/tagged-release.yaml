@@ -39,7 +39,10 @@ jobs:
         with:
           command: test
       - name: Release Build
-        run: cargo build --release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
       - name: Release
         uses: softprops/action-gh-release@v1
         env:
