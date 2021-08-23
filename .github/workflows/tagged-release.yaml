@@ -15,7 +15,7 @@ jobs:
           - macos-latest
     env:
       PROJECT_BIN_NAME: j
-      TAG_VERSION: ${{ env.GITHUB_REF.replace(/\/refs\/tags\//, '') }}
+      TAG_VERSION: ${{ github.ref.replace(/\/refs\/tags\//, '') }}
       ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
     runs-on: ${{ matrix.os }}
 
