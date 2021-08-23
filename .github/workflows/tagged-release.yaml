@@ -35,10 +35,9 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
-      - name: Add musl dep
+      - name: Add deps
         run: |
-          apk add build-base
-        if: ${{ endsWith(matrix.target, 'musl') }}
+          apt install build-essential
 
       - name: Release build
         uses: actions-rs/cargo@v1
