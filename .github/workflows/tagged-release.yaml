@@ -43,14 +43,17 @@ jobs:
         with:
           command: build
           args: --release --all-features
-      - name: Build Artifact
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
           name: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
           path: |
             target/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
           if-no-files-found: error
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
+          path: ${{ env.ARTIFACT_DIR }}/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
       - name: Release Artifact
         uses: softprops/action-gh-release@v1
         env:
