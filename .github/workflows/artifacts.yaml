@@ -36,9 +36,9 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Release Build
+      - name: Release build
         run: cargo build --release
-      - name: Upload Artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}

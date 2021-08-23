@@ -29,16 +29,16 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Rust Format
+      - name: Rust format
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
-      - name: Cargo Check
+      - name: Cargo check
         uses: actions-rs/cargo@v1
         with:
           command: check
-      - name: Clippy Check
+      - name: Clippy check
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

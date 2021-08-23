@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Tag Version
+      - name: Tag version
         id: tag_version
         run: |
           echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -38,7 +38,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-      - name: Release Build
+      - name: Release build
         uses: actions-rs/cargo@v1
         with:
           command: build
@@ -51,7 +51,7 @@ jobs:
           path: |
             target/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
-      - name: Release Artifact
+      - name: Release artifact
         uses: softprops/action-gh-release@v1
         env:
           TAG_VERSION: ${{ steps.tag_version.outputs.VERSION }}
