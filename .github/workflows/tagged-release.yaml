@@ -53,7 +53,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
-          path: ~/artifacts/
+          path: $GITHUB_WORKSPACE/artifacts/
       - name: Release
         uses: softprops/action-gh-release@v1
         env:
@@ -64,5 +64,5 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
           files: |
-            ~/artifacts/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
+            $GITHUB_WORKSPACE/artifacts/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
           fail_on_unmatched_files: true
