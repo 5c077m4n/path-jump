@@ -48,9 +48,10 @@ jobs:
         with:
           type: zip
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
+          directory: target/release/
           path: |
-            target/release/${{ env.PROJECT_BIN_NAME }}
-            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+            ${{ env.PROJECT_BIN_NAME }}
+            ${{ env.PROJECT_BIN_NAME }}.sh
       - name: Release artifact
         uses: softprops/action-gh-release@v1
         env:
