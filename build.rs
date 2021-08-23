@@ -14,6 +14,5 @@ fn main() -> io::Result<()> {
 
 	println!("cargo:rerun-if-changed=build.rs");
 	println!("cargo:rerun-if-changed=resources/j.sh");
-	println!("cargo:rerun-if-changed=resources/install.sh");
 	Ok(())
 }
