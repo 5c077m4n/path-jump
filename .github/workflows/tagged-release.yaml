@@ -42,7 +42,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          prerelease: false
+          prerelease: endsWith(github.ref, 'alpha') || endsWith(github.ref, 'beta')
           name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           files: |
