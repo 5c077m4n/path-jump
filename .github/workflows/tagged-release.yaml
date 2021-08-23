@@ -43,6 +43,14 @@ jobs:
         with:
           command: build
           args: --release --all-features
+      - name: Create Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
+          path: |
+            target/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+          if-no-files-found: error
       - name: Release
         uses: softprops/action-gh-release@v1
         env:
@@ -53,6 +61,5 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
           prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
           files: |
-            target/release/${{ env.PROJECT_BIN_NAME }}
-            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+            ${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}
           fail_on_unmatched_files: true
