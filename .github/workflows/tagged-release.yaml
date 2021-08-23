@@ -59,7 +59,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.TAG_VERSION }}
-          prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
+          prerelease: contains(env.TAG_VERSION, 'alpha') || contains(env.TAG_VERSION, 'beta')
           files: |
             target/release/${{ env.PROJECT_BIN_NAME }}_${{ matrix.os }}.zip
           fail_on_unmatched_files: true
