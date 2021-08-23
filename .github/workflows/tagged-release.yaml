@@ -15,12 +15,15 @@ jobs:
           - macos-latest
     env:
       PROJECT_BIN_NAME: j
-      TAG_VERSION: ${{ github.ref.replace(/\/refs\/tags\//, '') }}
       ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
+      - name: Tag Version
+        id: tag_version
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -50,6 +53,8 @@ jobs:
           if-no-files-found: error
       - name: Release Artifact
         uses: softprops/action-gh-release@v1
+        env:
+          TAG_VERSION: ${{ steps.tag_version.outputs.VERSION }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ env.TAG_VERSION }}-${{ matrix.os }}
