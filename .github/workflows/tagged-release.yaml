@@ -14,7 +14,7 @@ jobs:
       ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
     strategy:
       matrix:
-        targets:
+        target:
           - x86_64-unknown-linux-gnu
           - x86_64-apple-darwin
           - aarch64-apple-darwin
