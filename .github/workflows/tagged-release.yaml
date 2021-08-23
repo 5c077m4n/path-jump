@@ -31,10 +31,14 @@ jobs:
       - name: Release build (${{ matrix.target }})
         uses: actions-rs/toolchain@v1
         with:
-          command: build
-          target: x86_64-unknown-linux-gnu
-          args: --release --all-features
+          toolchain: stable
+          target: ${{ matrix.target }}
           override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --target ${{ matrix.target }}
 
       - name: Create artifact (${{ matrix.target }})
         uses: TheDoctor0/zip-release@master
