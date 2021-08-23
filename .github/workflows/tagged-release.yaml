@@ -28,27 +28,27 @@ jobs:
         id: tag_version
         run: |
           echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      - name: Release build (${{ matrix.target }})
-        uses: actions-rs/toolchain@v1
+      - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
-      - uses: actions-rs/cargo@v1
+
+      - name: Release build
+        uses: actions-rs/cargo@v1
         with:
-          use-cross: true
+          # use-cross: true
           command: build
           args: --release --target ${{ matrix.target }}
 
-      - name: Create artifact (${{ matrix.target }})
+      - name: Create artifact
         uses: TheDoctor0/zip-release@master
         with:
           type: zip
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
           path: |
-            target/release/${{ env.PROJECT_BIN_NAME }}
-            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+            target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }}
+            target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }}.sh
 
       - name: Cargo clean
         uses: actions-rs/cargo@v1
