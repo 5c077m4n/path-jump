@@ -22,6 +22,8 @@ Just press `j` to jump to whatever directory you want:
 
 ### TODO
 
+- [ ] Add bookmark support
+- [ ] Add custom commands
 - [ ] Add integration tests
 - [ ] Make a rusty api (plus publish crate?)
 - [ ] Add tab completion
