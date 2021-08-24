@@ -9,19 +9,26 @@ on:
 jobs:
   tagged_release:
     name: Tagged Release
-    runs-on: ubuntu-latest
     env:
       PROJECT_BIN_NAME: j
       ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
     strategy:
       fail-fast: false
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
-          - x86_64-apple-darwin
-          - aarch64-apple-darwin
-          - x86_64-unknown-linux-musl
-          - x86_64-unknown-freebsd
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            target: x86_64-apple-darwin
+          - os: macos-latest
+            target: aarch64-apple-darwin
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+          - os: ubuntu-latest
+            target: x86_64-unknown-freebsd
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
