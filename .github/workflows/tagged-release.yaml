@@ -62,11 +62,20 @@ jobs:
       #     sudo: false
       #     limit-access-to-actor: true
 
-      - name: Create artifact
+      - name: Create zip artifact
         uses: TheDoctor0/zip-release@master
         with:
           type: zip
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
+          path: |
+            target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }}
+            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+
+      - name: Create tar artifact
+        uses: TheDoctor0/zip-release@master
+        with:
+          type: tar
+          filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
           path: |
             target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }}
             target/release/${{ env.PROJECT_BIN_NAME }}.sh
@@ -86,4 +95,5 @@ jobs:
           prerelease: contains(env.TAG_VERSION, 'alpha') || contains(env.TAG_VERSION, 'beta')
           files: |
             ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
+            ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
           fail_on_unmatched_files: true
