@@ -4,7 +4,7 @@ A tiny cli tool to help you jump to the dir you want.
 
 ### Installation
 
-1. Go to [https://github.com/5c077m4n/path-jump/releases](https://github.com/5c077m4n/path-jump/releases) and download both `j` and `j.sh`
+1. Go to [https://github.com/5c077m4n/path-jump/releases](https://github.com/5c077m4n/path-jump/releases) and download the right zip/tar file for you
 1. Add files to `${XDG_DATA_HOME:-$HOME/.local/data}` or whereever
 1. `chmod +x /path/to/j` (if needed)
 1. Add to your `.zshrc`/`.bashrc` file `(cd /path/to/j && source ./j.sh)`
