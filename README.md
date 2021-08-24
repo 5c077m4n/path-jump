@@ -22,6 +22,7 @@ Just press `j` to jump to whatever directory you want:
 
 ### TODO
 
+- [ ] Add integration tests
 - [ ] Make a rusty api
 - [ ] Add tab completion
 - [ ] Add a dialog to show top relevant options
