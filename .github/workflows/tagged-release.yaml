@@ -62,14 +62,19 @@ jobs:
       #     sudo: false
       #     limit-access-to-actor: true
 
+      - name: Move final files
+        run: |
+          cp target/release/j.sh .
+          cp target/${{ matrix.target }}/release/j .
+
       - name: Create zip artifact
         uses: TheDoctor0/zip-release@master
         with:
           type: zip
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
           path: |
-            target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }}
-            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+            ${{ env.PROJECT_BIN_NAME }}
+            ${{ env.PROJECT_BIN_NAME }}.sh
 
       - name: Create tar artifact
         uses: TheDoctor0/zip-release@master
@@ -77,8 +82,8 @@ jobs:
           type: tar
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
           path: |
-            target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }}
-            target/release/${{ env.PROJECT_BIN_NAME }}.sh
+            ${{ env.PROJECT_BIN_NAME }}
+            ${{ env.PROJECT_BIN_NAME }}.sh
 
       - name: Cargo clean
         uses: actions-rs/cargo@v1
