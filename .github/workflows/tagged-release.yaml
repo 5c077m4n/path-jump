@@ -54,6 +54,14 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
+      # - name: Setup tmate debug session
+      #   if: ${{ failure() }}
+      #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 30
+      #   with:
+      #     sudo: false
+      #     limit-access-to-actor: true
+
       - name: Create artifact
         uses: TheDoctor0/zip-release@master
         with:
