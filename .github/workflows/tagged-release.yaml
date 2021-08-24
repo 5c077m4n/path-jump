@@ -9,14 +9,11 @@ jobs:
   tagged_release:
     name: Tagged Release
     env:
-      PROJECT_BIN_NAME: j
-      ARTIFACT_DIR: /home/runner/work/path-jump/path-jump/target/release
+      PROJECT_BIN_NAME: pathman
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
           - os: macos-latest
@@ -80,8 +77,8 @@ jobs:
       - name: Move final files
         run: |
           mkdir dist
-          cp target/release/j.sh dist/
-          cp target/${{ matrix.target }}/release/j dist/
+          cp resources/* dist/
+          cp target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }} dist/
 
       - name: Create zip artifact
         uses: TheDoctor0/zip-release@master
@@ -90,8 +87,8 @@ jobs:
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
           directory: dist/
           path: |
+            init.sh
             ${{ env.PROJECT_BIN_NAME }}
-            ${{ env.PROJECT_BIN_NAME }}.sh
 
       - name: Create tar artifact
         uses: TheDoctor0/zip-release@master
@@ -100,8 +97,8 @@ jobs:
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
           directory: dist/
           path: |
+            init.sh
             ${{ env.PROJECT_BIN_NAME }}
-            ${{ env.PROJECT_BIN_NAME }}.sh
 
       - name: Cargo clean
         uses: actions-rs/cargo@v1
