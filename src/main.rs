@@ -57,7 +57,10 @@ fn main() -> Result<()> {
 	} else if let Some(dir) = opt.dir {
 		match queries::find_dir(&db_conn, &dir) {
 			Ok(result) => println!("{}", &result),
-			Err(_) => println!("{}", &dir),
+			Err(_) => {
+                println!("{}", &dir);
+                std::process::exit(1);
+            }
 		};
 	} else {
 		queries::create_table(&mut db_conn)?;

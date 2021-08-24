@@ -11,7 +11,7 @@ A tiny cli tool to help you jump to the dir you want based on your history
 	```bash
 	(cd /path/to/j && source ./j.sh)
 	```
-1. `cd` your way to where ever
+1. `cd` your way around
 1. `j` your way to happyness!
 
 ### Usage
