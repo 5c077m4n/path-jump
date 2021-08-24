@@ -23,7 +23,7 @@ Just press `j` to jump to whatever directory you want:
 ### TODO
 
 - [ ] Add integration tests
-- [ ] Make a rusty api
+- [ ] Make a rusty api (plus publish crate?)
 - [ ] Add tab completion
 - [ ] Add a dialog to show top relevant options
 - [ ] Any ideas?
