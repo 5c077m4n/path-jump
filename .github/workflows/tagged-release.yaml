@@ -34,13 +34,13 @@ jobs:
         id: tag_version
         run: |
           echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-          
+
       - name: Set SDK for macOS aarch64
         if: ${{ matrix.target == 'aarch64-apple-darwin' && matrix.os == 'macos-latest' }}
         run: |
           sudo xcode-select -s "/Applications/Xcode_12.4.app"
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/*
-      
+
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
