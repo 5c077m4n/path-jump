@@ -64,14 +64,16 @@ jobs:
 
       - name: Move final files
         run: |
-          cp target/release/j.sh .
-          cp target/${{ matrix.target }}/release/j .
+          mkdir dist
+          cp target/release/j.sh dist/
+          cp target/${{ matrix.target }}/release/j dist/
 
       - name: Create zip artifact
         uses: TheDoctor0/zip-release@master
         with:
           type: zip
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
+          directory: dist/
           path: |
             ${{ env.PROJECT_BIN_NAME }}
             ${{ env.PROJECT_BIN_NAME }}.sh
@@ -81,6 +83,7 @@ jobs:
         with:
           type: tar
           filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
+          directory: dist/
           path: |
             ${{ env.PROJECT_BIN_NAME }}
             ${{ env.PROJECT_BIN_NAME }}.sh
@@ -99,6 +102,6 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}
           prerelease: contains(env.TAG_VERSION, 'alpha') || contains(env.TAG_VERSION, 'beta')
           files: |
-            ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
-            ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
+            dist/${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
+            dist/${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
           fail_on_unmatched_files: true
