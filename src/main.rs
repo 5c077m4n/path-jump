@@ -11,19 +11,29 @@ mod lib;
 use lib::queries;
 
 #[derive(Debug, StructOpt)]
-#[structopt(
-	name = "Path Jump options",
-	about = "All of the options for Path Jump."
-)]
+pub struct BookmarkCmd {
+    #[structopt()]
+    add: String,
+    #[structopt()]
+    delete: String,
+    #[structopt(long)]
+    expunge: bool,
+}
+#[derive(Debug, StructOpt)]
+#[structopt(name = "pathman options", about = "All of the options for pathman.")]
 pub struct Opt {
 	#[structopt()]
 	dir: Option<String>,
 	#[structopt(short, long)]
 	add: Option<PathBuf>,
+	#[structopt(subcommand)]
+	bookmark: BookmarkCmd,
 	#[structopt(short, long)]
 	dump: bool,
 	#[structopt(long)]
 	clear_history: bool,
+	#[structopt(short, long)]
+	init: bool,
 }
 
 fn main() -> Result<()> {
@@ -35,15 +45,15 @@ fn main() -> Result<()> {
 		let home_dir = env::var_os("HOME").unwrap();
 		PathBuf::from(home_dir).join(".local").join("state")
 	};
-	let data_dir = data_dir.join("j");
+	let data_dir = data_dir.join("pathman");
 	fs::create_dir_all(&data_dir).unwrap();
 
-	let mut db_conn = Connection::open(data_dir.join("j.db"))?;
+	let mut db_conn = Connection::open(data_dir.join("pathman.db"))?;
 
 	if opt.clear_history {
-		queries::clear_history(&db_conn)?;
+		queries::dir::clear_history(&db_conn)?;
 	} else if opt.dump {
-		let dump = queries::get_dump(&db_conn)?;
+		let dump = queries::dir::get_dump(&db_conn)?;
 		for dump_row in dump {
 			println!("{:#?}", dump_row);
 		}
@@ -52,15 +62,15 @@ fn main() -> Result<()> {
 
 		if let Ok(normalized_dir) = dir_path.canonicalize() {
 			let normalized_dir = normalized_dir.to_str().unwrap();
-			queries::upsert_dir(&db_conn, normalized_dir)?;
+			queries::dir::upsert(&db_conn, normalized_dir)?;
 		}
 	} else if let Some(dir) = opt.dir {
-		match queries::find_dir(&db_conn, &dir) {
+		match queries::dir::find(&db_conn, &dir) {
 			Ok(result) => println!("{}", &result),
 			Err(_) => println!("{}", &dir),
 		};
-	} else {
-		queries::create_table(&mut db_conn)?;
+	} else if opt.init {
+		queries::init(&mut db_conn)?;
 	}
 
 	Ok(())
