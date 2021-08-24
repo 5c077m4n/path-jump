@@ -1,18 +1,16 @@
 [package]
-name = "path-jump"
+name = "pathman"
 version = "0.0.41-alpha.0"
 edition = "2018"
 publish = false
+authors = ["Roee Shapira <ro33.sha@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 structopt = "0.3"
-
-[dependencies.rusqlite]
-version = "0.25"
-features = ["bundled"]
+rusqlite = { version = "0.25", features = ["bundled"] }
 
 [[bin]]
-name = "j"
+name = "pathman"
 path = "src/main.rs"
