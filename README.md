@@ -1,6 +1,6 @@
 # Path Jump
 
-A tiny cli tool to help you jump to the dir you want.
+A tiny cli tool to help you jump to the dir you want base on your history
 
 ### Installation
 
