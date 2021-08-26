@@ -32,7 +32,7 @@ fn main() -> Result<()> {
 
 		if let Ok(normalized_dir) = dir_path.canonicalize() {
 			let normalized_dir = normalized_dir.to_str().unwrap();
-			queries::bookmark::add(&db_conn, &name, &normalized_dir)?;
+			queries::bookmark::add(&db_conn, &name, normalized_dir)?;
 		}
 	} else if let Some(name) = opt.delete {
 		queries::bookmark::delete(&db_conn, &name)?;
