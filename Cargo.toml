@@ -2,7 +2,7 @@
 members = ["crates/paths", "crates/bookmarks", "crates/libs"]
 
 [workspace.metadata.release]
-disable-release = true
+disable-publish = true
 consolidate-commits = true
 consolidate-pushes = true
 tag-prefix = ''
