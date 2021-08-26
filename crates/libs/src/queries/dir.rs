@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use rusqlite::{Connection, Result};
 
-use super::super::types::DirScore;
+use crate::types::DirScore;
 
 pub fn upsert(conn: &Connection, dir_path: &str) -> Result<usize> {
 	conn.execute(

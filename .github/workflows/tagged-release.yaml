@@ -9,7 +9,7 @@ jobs:
   tagged_release:
     name: Tagged Release
     env:
-      PROJECT_BIN_NAME: pathman
+      PROJECT_BASE_NAME: pathman
     strategy:
       fail-fast: false
       matrix:
@@ -78,27 +78,30 @@ jobs:
         run: |
           mkdir dist
           cp resources/* dist/
-          cp target/${{ matrix.target }}/release/${{ env.PROJECT_BIN_NAME }} dist/
+          cp target/${{ matrix.target }}/release/${{ env.PROJECT_BASE_NAME }}_paths dist/
+          cp target/${{ matrix.target }}/release/${{ env.PROJECT_BASE_NAME }}_bookmarks dist/
 
       - name: Create zip artifact
         uses: TheDoctor0/zip-release@master
         with:
           type: zip
-          filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
+          filename: ${{ env.PROJECT_BASE_NAME }}_${{ matrix.target }}.zip
           directory: dist/
           path: |
             init.sh
-            ${{ env.PROJECT_BIN_NAME }}
+            ${{ env.PROJECT_BASE_NAME }}_paths
+            ${{ env.PROJECT_BASE_NAME }}_bookmarks
 
       - name: Create tar artifact
         uses: TheDoctor0/zip-release@master
         with:
           type: tar
-          filename: ${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
+          filename: ${{ env.PROJECT_BASE_NAME }}_${{ matrix.target }}.tar.gz
           directory: dist/
           path: |
             init.sh
-            ${{ env.PROJECT_BIN_NAME }}
+            ${{ env.PROJECT_BASE_NAME }}_paths
+            ${{ env.PROJECT_BASE_NAME }}_bookmarks
 
       - name: Cargo clean
         uses: actions-rs/cargo@v1
@@ -114,6 +117,6 @@ jobs:
           tag_name: ${{ env.TAG_VERSION }}
           prerelease: contains(env.TAG_VERSION, 'alpha') || contains(env.TAG_VERSION, 'beta')
           files: |
-            dist/${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.zip
-            dist/${{ env.PROJECT_BIN_NAME }}_${{ matrix.target }}.tar.gz
+            dist/${{ env.PROJECT_BASE_NAME }}_${{ matrix.target }}.zip
+            dist/${{ env.PROJECT_BASE_NAME }}_${{ matrix.target }}.tar.gz
           fail_on_unmatched_files: true

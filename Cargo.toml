@@ -1,16 +1,2 @@
-[package]
-name = "pathman"
-version = "0.0.41-alpha.0"
-edition = "2018"
-publish = false
-authors = ["Roee Shapira <ro33.sha@gmail.com>"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-structopt = "0.3"
-rusqlite = { version = "0.25", features = ["bundled"] }
-
-[[bin]]
-name = "pathman"
-path = "src/main.rs"
+[workspace]
+members = ["crates/paths", "crates/bookmarks", "crates/libs"]

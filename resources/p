@@ -1,12 +1,8 @@
 #!/bin/sh
 
-__PATHMAN="$(pwd)/$(dirname "$0")/pathman"
-"$__PATHMAN"
-
 cd () {
-	("$__PATHMAN" --add "$1" &) &>/dev/null
+	(pathman_paths --add "$1" &) &>/dev/null
 	builtin cd "$1"
 }
-${__PATHMAN_CUSTOM_CMD:-p} () {
-	cd "$("$__PATHMAN" "$1")"
-}
+
+cd "$(pathman_paths "$1")"
