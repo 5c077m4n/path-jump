@@ -1,6 +1,6 @@
 [package]
 name = "pathman_bookmarks"
-version = "0.0.42"
+version = "0.0.43-alpha.0"
 edition = "2018"
 authors = ["Roee Shapira <ro33.sha@gmail.com>"]
 publish = false
