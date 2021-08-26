@@ -1,2 +1,20 @@
-[workspace]
-members = ["crates/paths", "crates/bookmarks", "crates/libs"]
+[package]
+name = "pathman_paths"
+version = "0.0.47"
+edition = "2018"
+authors = ["Roee Shapira <ro33.sha@gmail.com>"]
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+structopt = "0.3"
+rusqlite = { version = "0.25", features = ["bundled"] }
+
+[lib]
+name = "lib"
+path = "src/lib/mod.rs"
+
+[[bin]]
+name = "pathman_bookmarks"
+path = "src/bin/bookmarks/main.rs"

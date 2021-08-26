@@ -3,7 +3,7 @@ use structopt::{self, StructOpt};
 
 use rusqlite::{Connection, Result};
 
-use libs::{paths::get_state_dir, queries};
+use lib::{paths::get_state_dir, queries};
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Pathman options", about = "All of the options for pathman")]

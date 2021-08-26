@@ -1,6 +1,6 @@
 use std::env::current_dir;
 
-use libs::{paths::get_state_dir, queries};
+use lib::{paths::get_state_dir, queries};
 use rusqlite::{Connection, Result};
 use structopt::{self, StructOpt};
 
