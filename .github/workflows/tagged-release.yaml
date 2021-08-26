@@ -88,7 +88,8 @@ jobs:
           filename: ${{ env.PROJECT_BASE_NAME }}_${{ matrix.target }}.zip
           directory: dist/
           path: |
-            init.sh
+            p
+            pb
             ${{ env.PROJECT_BASE_NAME }}_paths
             ${{ env.PROJECT_BASE_NAME }}_bookmarks
 
@@ -99,7 +100,8 @@ jobs:
           filename: ${{ env.PROJECT_BASE_NAME }}_${{ matrix.target }}.tar.gz
           directory: dist/
           path: |
-            init.sh
+            p
+            pb
             ${{ env.PROJECT_BASE_NAME }}_paths
             ${{ env.PROJECT_BASE_NAME }}_bookmarks
 
