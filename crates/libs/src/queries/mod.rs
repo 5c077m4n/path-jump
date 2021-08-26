@@ -1,7 +1,7 @@
 use rusqlite::{Connection, Result};
 
-pub mod dir;
 pub mod bookmark;
+pub mod dir;
 
 pub fn init(conn: &mut Connection) -> Result<()> {
 	let tx = conn.transaction()?;

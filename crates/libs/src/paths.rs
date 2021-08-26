@@ -10,5 +10,5 @@ pub fn get_state_dir() -> io::Result<PathBuf> {
 	let state_dir = state_dir.join("pathman");
 	fs::create_dir_all(&state_dir)?;
 
-    Ok(state_dir)
+	Ok(state_dir)
 }

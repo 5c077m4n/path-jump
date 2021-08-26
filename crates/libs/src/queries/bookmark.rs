@@ -8,8 +8,8 @@ pub fn get_bookmark(conn: &Connection, name: &str) -> Result<String> {
 	conn.query_row(
 		"SELECT b.path
            FROM bookmarks AS b",
-        &[(":name", name)],
-        |row| row.get(0),
+		&[(":name", name)],
+		|row| row.get(0),
 	)
 }
 
