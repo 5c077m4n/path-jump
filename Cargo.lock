@@ -178,7 +178,7 @@ dependencies = [
 
 [[package]]
 name = "pathman_paths"
-version = "0.0.41"
+version = "0.0.42-alpha.0"
 dependencies = [
  "libs",
  "rusqlite",
