@@ -1,6 +1,6 @@
 [package]
 name = "pathman_paths"
-version = "0.0.44-alpha.0"
+version = "0.0.44"
 edition = "2018"
 authors = ["Roee Shapira <ro33.sha@gmail.com>"]
 publish = false
