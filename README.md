@@ -17,7 +17,7 @@ Just press `p` to jump to whatever directory you want:
 
 ### TODO
 
-- [v] Add bookmark support
+- [x] Add bookmark support
 - [ ] Add a dialog to show top relevant options
 - [ ] Add custom commands
 - [ ] Add integration tests
