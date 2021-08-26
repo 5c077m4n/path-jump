@@ -1,4 +1,4 @@
 disable-publish = true
 consolidate-commits = true
 consolidate-pushes = true
-tag-prefix = "v"
+tag-prefix = ""
