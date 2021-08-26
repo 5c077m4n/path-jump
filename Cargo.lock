@@ -139,7 +139,7 @@ checksum = "3cb00336871be5ed2c8ed44b60ae9959dc5b9f08539422ed43f09e34ecaeba21"
 
 [[package]]
 name = "libs"
-version = "0.0.45-alpha.0"
+version = "0.0.45"
 dependencies = [
  "rusqlite",
 ]
@@ -169,7 +169,7 @@ checksum = "692fcb63b64b1758029e0a96ee63e049ce8c5948587f2f7208df04625e5f6b56"
 
 [[package]]
 name = "pathman_bookmarks"
-version = "0.0.45-alpha.0"
+version = "0.0.45"
 dependencies = [
  "libs",
  "rusqlite",
@@ -178,7 +178,7 @@ dependencies = [
 
 [[package]]
 name = "pathman_paths"
-version = "0.0.45-alpha.0"
+version = "0.0.45"
 dependencies = [
  "libs",
  "rusqlite",
