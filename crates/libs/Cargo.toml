@@ -1,6 +1,6 @@
 [package]
 name = "libs"
-version = "0.0.45"
+version = "0.0.46-alpha.0"
 edition = "2018"
 authors = ["Roee Shapira <ro33.sha@gmail.com>"]
 publish = false
