@@ -59,7 +59,7 @@ pub fn clear_history(conn: &Connection) -> Result<usize> {
 	conn.execute("DELETE FROM dir_scoring;", [])
 }
 
-pub fn get_dump(conn: &Connection) -> Result<Vec<DirScore>> {
+pub fn get_all(conn: &Connection) -> Result<Vec<DirScore>> {
 	let mut stmt = conn.prepare(
 		"SELECT ds.path, ds.score, ds.created_at, ds.updated_at
             FROM dir_scoring AS ds;",
@@ -94,7 +94,7 @@ mod tests {
 		let mut db_conn = Connection::open_in_memory()?;
 		init_tables(&mut db_conn)?;
 
-		let dump = get_dump(&db_conn)?;
+		let dump = get_all(&db_conn)?;
 		assert_eq!(dump.len(), 0);
 
 		Ok(())

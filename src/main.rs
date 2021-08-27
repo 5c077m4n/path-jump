@@ -1,7 +1,8 @@
 use std::{env::current_dir, path::PathBuf};
-use structopt::{self, StructOpt};
 
+use dialoguer::{Confirm, Select};
 use rusqlite::{Connection, Result};
+use structopt::{self, StructOpt};
 
 use lib::{paths::get_state_dir, queries};
 
@@ -17,7 +18,7 @@ pub struct Opt {
 	#[structopt(long)]
 	clear_history: bool,
 	#[structopt(short, long)]
-	init: bool,
+	gui: bool,
 }
 
 fn main() -> Result<()> {
@@ -28,10 +29,31 @@ fn main() -> Result<()> {
 	queries::dir::init_tables(&mut db_conn)?;
 
 	if let Some(dir) = opt.dir {
-		match queries::dir::find(&db_conn, &dir) {
-			Ok(result) => println!("{}", &result),
-			Err(_) => println!("{}", &dir),
-		};
+		if opt.gui {
+			let results = queries::dir::get_all(&db_conn)?;
+			let results: Vec<&str> = results
+				.iter()
+				.filter_map(|dir_data| dir_data.path.to_str())
+				.collect();
+			if !results.is_empty() {
+				let selection = Select::new().items(&results).default(0).interact().unwrap();
+				let selection = results.get(selection).unwrap();
+				println!("{}", selection);
+			} else {
+				let _ = Confirm::new()
+					.with_prompt("Sorry, there were no matches")
+					.default(true)
+					.interact()
+					.unwrap();
+				println!("{}", dir);
+				std::process::exit(101);
+			}
+		} else {
+			match queries::dir::find(&db_conn, &dir) {
+				Ok(result) => println!("{}", &result),
+				Err(_) => println!("{}", &dir),
+			};
+		}
 	} else if let Some(dir_path) = opt.add {
 		let dir_path = current_dir().unwrap().join(dir_path);
 
@@ -42,7 +64,7 @@ fn main() -> Result<()> {
 	} else if opt.clear_history {
 		queries::dir::clear_history(&db_conn)?;
 	} else if opt.dump {
-		let dump = queries::dir::get_dump(&db_conn)?;
+		let dump = queries::dir::get_all(&db_conn)?;
 		for dump_row in dump {
 			println!("{:#?}", dump_row);
 		}

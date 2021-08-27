@@ -2,7 +2,7 @@
 
 cd () {
 	(pathman_paths --add "$1" &) &>/dev/null
-	builtin cd "$1"
+	builtin cd "$@"
 }
 
-cd "$(pathman_paths "$1")"
+cd "$(pathman_paths "$@")"

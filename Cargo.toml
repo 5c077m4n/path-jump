@@ -4,12 +4,14 @@ version = "0.0.51-alpha.0"
 edition = "2018"
 authors = ["Roee Shapira <ro33.sha@gmail.com>"]
 publish = false
+default-run = "pathman_paths"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 structopt = "0.3"
 rusqlite = { version = "0.25", features = ["bundled"] }
+dialoguer = "0.8"
 
 [lib]
 name = "lib"
