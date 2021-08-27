@@ -25,7 +25,7 @@ fn main() -> Result<()> {
 
 	let state_dir = get_state_dir().unwrap();
 	let mut db_conn = Connection::open(state_dir.join("pathman.db"))?;
-	queries::init(&mut db_conn)?;
+	queries::dir::init_tables(&mut db_conn)?;
 
 	if let Some(dir) = opt.dir {
 		match queries::dir::find(&db_conn, &dir) {

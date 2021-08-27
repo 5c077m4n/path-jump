@@ -22,7 +22,7 @@ fn main() -> Result<()> {
 
 	let state_dir = get_state_dir().unwrap();
 	let mut db_conn = Connection::open(state_dir.join("pathman.db"))?;
-	queries::init(&mut db_conn)?;
+	queries::bookmark::init_tables(&mut db_conn)?;
 
 	if let Some(name) = opt.get {
 		let bm = queries::bookmark::get_bookmark(&db_conn, &name)?;

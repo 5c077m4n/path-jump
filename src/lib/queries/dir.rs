@@ -4,6 +4,33 @@ use rusqlite::{Connection, Result};
 
 use crate::types::DirScore;
 
+pub fn init_tables(conn: &mut Connection) -> Result<()> {
+	let tx = conn.transaction()?;
+	tx.execute(
+        "CREATE TABLE IF NOT EXISTS dir_scoring (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            path TEXT UNIQUE NOT NULL,
+            score INTEGER DEFAULT 0 NOT NULL,
+            created_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL,
+            updated_at INTEGER DEFAULT (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER)) NOT NULL
+        );",
+        []
+    )?;
+	tx.execute(
+		"CREATE TRIGGER IF NOT EXISTS dir_scoring__updated_at
+            AFTER UPDATE
+            ON dir_scoring
+            FOR EACH ROW
+            BEGIN
+                UPDATE dir_scoring
+                SET updated_at = (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER))
+                WHERE id = OLD.id;
+            END;",
+		[],
+	)?;
+	tx.commit()
+}
+
 pub fn upsert(conn: &Connection, dir_path: &str) -> Result<usize> {
 	conn.execute(
 		"INSERT INTO dir_scoring (path) VALUES (:path)
