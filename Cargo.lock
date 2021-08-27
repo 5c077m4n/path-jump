@@ -162,7 +162,7 @@ checksum = "692fcb63b64b1758029e0a96ee63e049ce8c5948587f2f7208df04625e5f6b56"
 
 [[package]]
 name = "pathman_paths"
-version = "0.0.49"
+version = "0.0.50-alpha.0"
 dependencies = [
  "rusqlite",
  "structopt",
