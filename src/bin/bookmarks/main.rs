@@ -25,7 +25,7 @@ fn main() -> Result<()> {
 	queries::bookmark::init_tables(&mut db_conn)?;
 
 	if let Some(name) = opt.get {
-		let bm = queries::bookmark::get_bookmark(&db_conn, &name)?;
+		let bm = queries::bookmark::get(&db_conn, &name)?;
 		println!("{:?}", bm);
 	} else if let Some(name) = opt.add {
 		let dir_path = current_dir().unwrap();

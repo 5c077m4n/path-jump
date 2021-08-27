@@ -25,16 +25,16 @@ pub fn init_tables(conn: &mut Connection) -> Result<()> {
                 UPDATE bookmarks
                     SET updated_at = (CAST((julianday('now') - 2440587.5) * 86400000 AS INTEGER))
                     WHERE id = OLD.id;
-            END;",
+            END;
+        ",
 		[],
 	)?;
 	tx.commit()
 }
 
-pub fn get_bookmark(conn: &Connection, name: &str) -> Result<String> {
+pub fn get(conn: &Connection, name: &str) -> Result<String> {
 	conn.query_row(
-		"SELECT b.path
-           FROM bookmarks AS b",
+		"SELECT b.path FROM bookmarks AS b;",
 		&[(":name", name)],
 		|row| row.get(0),
 	)
@@ -46,7 +46,8 @@ pub fn add(conn: &Connection, name: &str, path: &str) -> Result<usize> {
             ON CONFLICT(name)
                 DO UPDATE
                 SET path = :path
-                WHERE name = :name;",
+                WHERE name = :name;
+        ",
 		&[(":name", name), (":path", path)],
 	)
 }
@@ -75,4 +76,43 @@ pub fn get_dump(conn: &Connection) -> Result<Vec<Bookmark>> {
 		});
 	}
 	Ok(bookmark_list)
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	#[should_panic]
+	fn should_make_sure_db_is_empty() {
+		let db_conn = Connection::open_in_memory().unwrap();
+		add(
+			&db_conn,
+			"should not be created",
+			"Whatever, this should panic anyway",
+		)
+		.unwrap();
+	}
+
+	#[test]
+	fn should_create_table() -> Result<()> {
+		let mut db_conn = Connection::open_in_memory()?;
+		init_tables(&mut db_conn)?;
+
+		let dump = get_dump(&db_conn)?;
+		assert_eq!(dump.len(), 0);
+
+		Ok(())
+	}
+
+	#[test]
+	fn should_add_dir() -> Result<()> {
+		let mut db_conn = Connection::open_in_memory()?;
+		init_tables(&mut db_conn)?;
+
+		let n = add(&db_conn, "bm1", "path")?;
+		assert_eq!(n, 1);
+
+		Ok(())
+	}
 }

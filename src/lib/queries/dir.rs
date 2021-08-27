@@ -80,7 +80,6 @@ pub fn get_dump(conn: &Connection) -> Result<Vec<DirScore>> {
 
 #[cfg(test)]
 mod tests {
-	use super::super::init;
 	use super::*;
 
 	#[test]
@@ -93,7 +92,7 @@ mod tests {
 	#[test]
 	fn should_create_table() -> Result<()> {
 		let mut db_conn = Connection::open_in_memory()?;
-		init(&mut db_conn)?;
+		init_tables(&mut db_conn)?;
 
 		let dump = get_dump(&db_conn)?;
 		assert_eq!(dump.len(), 0);
@@ -104,7 +103,7 @@ mod tests {
 	#[test]
 	fn should_add_dir() -> Result<()> {
 		let mut db_conn = Connection::open_in_memory()?;
-		init(&mut db_conn)?;
+		init_tables(&mut db_conn)?;
 
 		let n = upsert(&db_conn, "path")?;
 		assert_eq!(n, 1);
@@ -115,7 +114,7 @@ mod tests {
 	#[test]
 	fn should_get_best_scored_dir() -> Result<()> {
 		let mut db_conn = Connection::open_in_memory()?;
-		init(&mut db_conn)?;
+		init_tables(&mut db_conn)?;
 
 		upsert(&db_conn, "path")?;
 		upsert(&db_conn, "path")?;
