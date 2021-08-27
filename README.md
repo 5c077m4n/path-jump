@@ -27,4 +27,4 @@ Just press `p` to jump to whatever directory you want:
 
 ---
 
-Inspired by [z](https://github.com/rupa/z/).
+Inspired by [z](https://github.com/rupa/z/) and [autojump](https://github.com/wting/autojump).
