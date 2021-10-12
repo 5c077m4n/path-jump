@@ -1,4 +1,8 @@
-use std::{env, fs, io, path::PathBuf};
+use std::{
+	env, fs, io,
+	path::PathBuf,
+	time::{SystemTime, UNIX_EPOCH},
+};
 
 pub fn get_state_dir() -> io::Result<PathBuf> {
 	let state_dir = if let Some(xdg_state_dir) = env::var_os("XDG_STATE_HOME") {
@@ -11,4 +15,16 @@ pub fn get_state_dir() -> io::Result<PathBuf> {
 	fs::create_dir_all(&state_dir)?;
 
 	Ok(state_dir)
+}
+
+pub fn get_tmp_file() -> io::Result<PathBuf> {
+	let epoch = SystemTime::now()
+		.duration_since(UNIX_EPOCH)
+		.unwrap()
+		.as_secs();
+	let tmp_dir = env::temp_dir().join("pathman");
+	fs::create_dir_all(&tmp_dir)?;
+
+	let tmp_file = tmp_dir.join(epoch.to_string());
+	Ok(tmp_file)
 }
