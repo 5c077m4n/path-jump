@@ -1,7 +1,7 @@
 use std::{env::current_dir, path::PathBuf};
 
 use dialoguer::{Confirm, Select};
-use rusqlite::Connection;
+use rusqlite::{Connection};
 use structopt::{self, StructOpt};
 
 use lib::{errors::ErrorType, paths::get_state_dir, queries};
@@ -36,14 +36,15 @@ fn main() -> Result<(), ErrorType> {
 				.filter_map(|dir_data| dir_data.path.to_str())
 				.collect();
 			if !results.is_empty() {
-				let selection = Select::new().items(&results).default(0).interact()?;
+				let selection = Select::new().items(&results).default(0).interact().unwrap();
 				let selection = results.get(selection).unwrap();
 				println!("{}", selection);
 			} else {
 				let _ = Confirm::new()
 					.with_prompt("Sorry, there were no matches")
 					.default(true)
-					.interact()?;
+					.interact()
+					.unwrap();
 				println!("{}", dir);
 				std::process::exit(101);
 			}
@@ -54,7 +55,7 @@ fn main() -> Result<(), ErrorType> {
 			};
 		}
 	} else if let Some(dir_path) = opt.add {
-		let dir_path = current_dir()?.join(dir_path);
+		let dir_path = current_dir().unwrap().join(dir_path);
 
 		if let Ok(normalized_dir) = dir_path.canonicalize() {
 			let normalized_dir = normalized_dir.to_str().unwrap();
