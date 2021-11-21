@@ -1,10 +1,10 @@
-# Path Jump
+# Pathman
 
 A tiny cli tool to help you jump to the dir you want based on your history
 
 ### Installation
 
-1. Go to [the latest release page](https://github.com/5c077m4n/path-jump/releases/latest) and download the right zip/tar file for you
+1. Go to [the latest release page](https://github.com/5c077m4n/pathman/releases/latest) and download the right zip/tar file for you
 1. Add files to `$PATH`
 1. `cd` your way around
 1. `p` your way to happyness!
